@@ -7,9 +7,6 @@ pipeline {
     stage('Install') {
       steps {
         sh 'npm ci'
-        // eyes-storybook drives Chrome through Puppeteer. Newer npm versions skip the install
-        // script that normally downloads it, so fetch it explicitly (cached after the first run).
-        sh 'npx puppeteer browsers install chrome'
       }
     }
     stage('Visual tests') {
@@ -17,7 +14,9 @@ pipeline {
         // One block = one Eyes batch, one pair of PR checks, one design review for everything inside.
         applitools(readCredentialsId: 'applitools-read-api-key') {
           sh 'npx playwright test'
-          sh 'npx eyes-storybook --exitcode false'
+          // eyes-storybook drives Chrome through Puppeteer. Reuse the Playwright image's Chromium: Puppeteer's
+          // own Chrome download has no Linux ARM build, and newer npm versions skip that download anyway.
+          sh 'PUPPETEER_EXECUTABLE_PATH=$(ls -d /ms-playwright/chromium-*/chrome-linux*/chrome | head -1) npx eyes-storybook --exitcode false'
         }
       }
     }
