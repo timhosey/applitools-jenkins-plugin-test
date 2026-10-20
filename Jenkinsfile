@@ -1,11 +1,16 @@
 pipeline {
-  agent any
+  agent { label 'playwright' }
   stages {
-    stage('Hello') {
+    stage('Install') {
       steps {
-        echo "Building ${env.BRANCH_NAME} @ ${env.GIT_COMMIT}"
-        withCredentials([string(credentialsId: 'applitools-api-key', variable: 'APPLITOOLS_API_KEY')]) {
-          echo "Applitools key loaded (${env.APPLITOOLS_API_KEY.length()} chars)"
+        sh 'node --version && npm ci'
+      }
+    }
+    stage('Visual tests') {
+      steps {
+        applitools {
+          sh 'env | grep ^APPLITOOLS_ | grep -v API_KEY | sort'
+          sh 'npx playwright test'
         }
       }
     }
