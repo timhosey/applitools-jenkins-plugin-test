@@ -1,17 +1,23 @@
 pipeline {
   agent { label 'playwright' }
+  environment {
+    STORYBOOK_DISABLE_TELEMETRY = '1'
+  }
   stages {
     stage('Install') {
       steps {
-        sh 'node --version && npm ci'
+        sh 'npm ci'
+        // eyes-storybook drives Chrome through Puppeteer. Newer npm versions skip the install
+        // script that normally downloads it, so fetch it explicitly (cached after the first run).
+        sh 'npx puppeteer browsers install chrome'
       }
     }
     stage('Visual tests') {
       steps {
-        // Run key uploads tests; the read key lets the plugin fetch results (run keys get HTTP 403).
+        // One block = one Eyes batch, one pair of PR checks, one design review for everything inside.
         applitools(readCredentialsId: 'applitools-read-api-key') {
-          sh 'env | grep ^APPLITOOLS_ | grep -v API_KEY | sort'
           sh 'npx playwright test'
+          sh 'npx eyes-storybook --exitcode false'
         }
       }
     }
