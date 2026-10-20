@@ -22,6 +22,8 @@ export default defineConfig<EyesFixture>({
         { iosDeviceInfo: { deviceName: 'iPhone 15' } },
       ],
       failTestsOnDiff: 'afterAll',
+      // Experiment: rule NLP in or out as the cause of "Request timed out, likely because it was stuck".
+      nlpOptions: { enabled: false },
     },
   },
   projects: [
