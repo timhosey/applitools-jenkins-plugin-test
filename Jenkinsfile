@@ -1,11 +1,22 @@
 pipeline {
-  agent any
+  agent { label 'playwright' }
+  environment {
+    STORYBOOK_DISABLE_TELEMETRY = '1'
+  }
   stages {
-    stage('Hello') {
+    stage('Install') {
       steps {
-        echo "Building ${env.BRANCH_NAME} @ ${env.GIT_COMMIT}"
-        withCredentials([string(credentialsId: 'applitools-api-key', variable: 'APPLITOOLS_API_KEY')]) {
-          echo "Applitools key loaded (${env.APPLITOOLS_API_KEY.length()} chars)"
+        sh 'npm ci'
+      }
+    }
+    stage('Visual tests') {
+      steps {
+        // One block = one Eyes batch, one pair of PR checks, one design review for everything inside.
+        applitools(readCredentialsId: 'applitools-read-api-key') {
+          sh 'npx playwright test'
+          // eyes-storybook drives Chrome through Puppeteer. Reuse the Playwright image's Chromium: Puppeteer's
+          // own Chrome download has no Linux ARM build, and newer npm versions skip that download anyway.
+          sh 'PUPPETEER_EXECUTABLE_PATH=$(ls -d /ms-playwright/chromium-*/chrome-linux*/chrome | head -1) npx eyes-storybook --exitcode false'
         }
       }
     }

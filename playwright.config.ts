@@ -21,7 +21,10 @@ export default defineConfig<EyesFixture>({
         { name: 'safari', width: 1280, height: 800 },
         { iosDeviceInfo: { deviceName: 'iPhone 15' } },
       ],
-      failTestsOnDiff: 'afterAll',
+      // Let the Jenkins plugin judge diffs (yellow build + PR check) instead of failing the test run.
+      failTestsOnDiff: false,
+      // Experiment: rule NLP in or out as the cause of "Request timed out, likely because it was stuck".
+      nlpOptions: { enabled: false },
     },
   },
   projects: [
