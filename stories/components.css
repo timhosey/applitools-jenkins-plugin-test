@@ -2,5 +2,5 @@
 .btn--primary { background: #0a7d4f; border-color: #0a7d4f; color: #fff; }
 .btn--secondary { background: #fff; color: #3b2bd9; }
 .card { font: 15px/1.5 system-ui, sans-serif; width: 320px; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgb(0 0 0 / 0.12); }
-.card h3 { margin: 0 0 8px; font-size: 18px; color: #1d1d1f; }
+.card h3 { margin: 0 0 8px; font-size: 18px; color: #3b2bd9; }
 .card p { margin: 0 0 16px; color: #555; }
