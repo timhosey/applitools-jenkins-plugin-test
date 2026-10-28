@@ -1,0 +1,28 @@
+name: Visual tests
+on: pull_request
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: read
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Vendored copy of applitools-visual-review-action (milestone 1) for a live test.
+      - uses: ./.github/actions/applitools-visual-review
+        env:
+          STORYBOOK_DISABLE_TELEMETRY: '1'
+        with:
+          apiKey: ${{ secrets.APPLITOOLS_API_KEY }}
+          readApiKey: ${{ secrets.APPLITOOLS_READ_KEY }}
+          expectApps: Applitools Website, Storybook Sandbox
+          run: |
+            npx playwright test
+            PUPPETEER_EXECUTABLE_PATH=$(which google-chrome) npx eyes-storybook
