@@ -1,0 +1,28 @@
+name: Applitools refresh
+on:
+  # schedule and workflow_dispatch only fire from the default branch; this test branch exercises the label trigger.
+  schedule:
+    - cron: '7-59/10 * * * 1-5'
+  workflow_dispatch:
+    inputs:
+      pr: {description: 'Pull request number (empty: every open PR)', required: false}
+  pull_request:
+    types: [labeled, unlabeled]
+
+permissions:
+  checks: write
+  pull-requests: read
+
+jobs:
+  refresh:
+    if: github.event_name != 'pull_request' || github.event.label.name == 'design-review'
+    runs-on: ubuntu-latest
+    steps:
+      # The vendored action lives in the repo, so check it out (a published action wouldn't need this).
+      - uses: actions/checkout@v5
+        with: {sparse-checkout: .github/actions}
+      - uses: ./.github/actions/applitools-visual-review
+        with:
+          mode: refresh
+          readApiKey: ${{ secrets.APPLITOOLS_READ_KEY }}
+          pullRequest: ${{ inputs.pr }}
