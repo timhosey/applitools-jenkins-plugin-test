@@ -15,15 +15,6 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - name: Eyes key permissions (temporary diagnostic; prints permissions only)
-        env:
-          RUN_KEY: ${{ secrets.APPLITOOLS_API_KEY }}
-          READ_KEY: ${{ secrets.APPLITOOLS_READ_KEY }}
-        run: |
-          for k in RUN_KEY READ_KEY; do
-            printf '%s: ' "$k"
-            curl -s -H "X-Eyes-Api-Key: ${!k}" https://eyes.applitools.com/api/v1/auth/api-key-validation | jq -c '{permissions}' || echo unreadable
-          done
       # Vendored copy of applitools-visual-review-action (milestone 1) for a live test.
       - uses: ./.github/actions/applitools-visual-review
         env:
