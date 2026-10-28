@@ -15,7 +15,7 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # Vendored copy of applitools-visual-review-action (milestone 1) for a live test.
+      # Vendored copy of applitools-visual-review-action (with mode: refresh) for a live test.
       - uses: ./.github/actions/applitools-visual-review
         env:
           STORYBOOK_DISABLE_TELEMETRY: '1'
