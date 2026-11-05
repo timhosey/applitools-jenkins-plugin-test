@@ -6,3 +6,4 @@ const button = (variant, label) => `<button class="btn btn--${variant}">${label}
 
 export const Primary = () => button('primary', 'Run visual tests');
 export const Secondary = () => button('secondary', 'View results');
+export const MergeTestWebhook = () => button('primary', 'Merge test: webhook');
