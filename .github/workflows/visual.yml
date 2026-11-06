@@ -1,5 +1,8 @@
 name: Visual tests
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches: [github-action-gate]   # the branch build that reports baseline merges into it
 
 permissions:
   contents: read
@@ -15,8 +18,7 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # Vendored copy of applitools-visual-review-action (with mode: refresh) for a live test.
-      - uses: ./.github/actions/applitools-visual-review
+      - uses: applitools/eyes-github-action@5e83ac72ef0d1c92e30f7314d2d80fe4cc813bdc
         env:
           STORYBOOK_DISABLE_TELEMETRY: '1'
         with:
