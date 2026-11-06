@@ -2,12 +2,12 @@ name: Visual tests
 on:
   pull_request:
   push:
-    branches: [github-action-gate]   # the branch build that reports baseline merges into it
+    branches: [github-action-gate]   # the branch build: retries baseline merges into it
 
 permissions:
   contents: read
   checks: write
-  pull-requests: read
+  pull-requests: write   # clear a PR's alert once its baselines merge
 
 jobs:
   visual:
@@ -18,12 +18,13 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - uses: applitools/eyes-github-action@ed47ebf1b6033717fe1581c459b02f28177f2993
+      - uses: applitools/eyes-github-action@2e1a1cce760574103f9d1b4dc3a5cd8d3e8bcb1f
         env:
           STORYBOOK_DISABLE_TELEMETRY: '1'
         with:
           apiKey: ${{ secrets.APPLITOOLS_API_KEY }}
           readApiKey: ${{ secrets.APPLITOOLS_READ_KEY }}
+          mergeApiKey: ${{ secrets.APPLITOOLS_MERGE_KEY }}
           expectApps: Applitools Website, Storybook Sandbox
           run: |
             npx playwright test

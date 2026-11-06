@@ -6,7 +6,7 @@ on:
 
 permissions:
   checks: write
-  pull-requests: read
+  pull-requests: write   # comment on and label the PR when its baselines can't be merged
 
 concurrency: applitools-merge-${{ github.event.pull_request.base.ref }}
 
@@ -15,7 +15,7 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: applitools/eyes-github-action@ed47ebf1b6033717fe1581c459b02f28177f2993
+      - uses: applitools/eyes-github-action@2e1a1cce760574103f9d1b4dc3a5cd8d3e8bcb1f
         with:
           mode: merge
           apiKey: ${{ secrets.APPLITOOLS_API_KEY }}
