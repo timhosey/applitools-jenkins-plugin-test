@@ -11,3 +11,4 @@ export const MergeTestJobDeleted = () => button('primary', 'Merge test: job dele
 export const MergeTestJobDeleted2 = () => button('primary', 'Merge test: job deleted 2');
 export const MergeTestJobDeleted3 = () => button('primary', 'Merge test: job deleted 3');
 export const MergeTestDesignOff = () => button('primary', 'Design off');
+export const MergeTestVisibility = () => button('primary', 'Merge visibility');
