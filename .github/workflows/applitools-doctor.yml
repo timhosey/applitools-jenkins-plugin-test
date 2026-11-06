@@ -11,7 +11,7 @@ jobs:
   doctor:
     runs-on: ubuntu-latest
     steps:
-      - uses: applitools/eyes-github-action@cb436fad4771b5175055118e0103b1e8f39a8e20
+      - uses: applitools/eyes-github-action@0bed1bea82f506783cd5dbfaeaff2b4db082d285
         with:
           mode: doctor
           apiKey: ${{ secrets.APPLITOOLS_API_KEY }}
