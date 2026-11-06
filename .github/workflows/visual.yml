@@ -18,7 +18,7 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - uses: applitools/eyes-github-action@2e1a1cce760574103f9d1b4dc3a5cd8d3e8bcb1f
+      - uses: applitools/eyes-github-action@cb436fad4771b5175055118e0103b1e8f39a8e20
         env:
           STORYBOOK_DISABLE_TELEMETRY: '1'
         with:
