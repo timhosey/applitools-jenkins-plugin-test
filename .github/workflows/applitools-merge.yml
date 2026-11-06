@@ -1,0 +1,22 @@
+name: Applitools baseline merge
+on:
+  # As above: pull_request_target in the README.
+  pull_request:
+    types: [closed]
+
+permissions:
+  checks: write
+  pull-requests: write   # comment on and label the PR when its baselines can't be merged
+
+concurrency: applitools-merge-${{ github.event.pull_request.base.ref }}
+
+jobs:
+  merge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: applitools/eyes-github-action@0bed1bea82f506783cd5dbfaeaff2b4db082d285
+        with:
+          mode: merge
+          apiKey: ${{ secrets.APPLITOOLS_API_KEY }}
+          mergeApiKey: ${{ secrets.APPLITOOLS_MERGE_KEY }}

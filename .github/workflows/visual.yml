@@ -1,0 +1,31 @@
+name: Visual tests
+on:
+  pull_request:
+  push:
+    branches: [github-action-gate]   # the branch build: retries baseline merges into it
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write   # clear a PR's alert once its baselines merge
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - uses: applitools/eyes-github-action@0bed1bea82f506783cd5dbfaeaff2b4db082d285
+        env:
+          STORYBOOK_DISABLE_TELEMETRY: '1'
+        with:
+          apiKey: ${{ secrets.APPLITOOLS_API_KEY }}
+          readApiKey: ${{ secrets.APPLITOOLS_READ_KEY }}
+          mergeApiKey: ${{ secrets.APPLITOOLS_MERGE_KEY }}
+          expectApps: Applitools Website, Storybook Sandbox
+          run: |
+            npx playwright test
+            PUPPETEER_EXECUTABLE_PATH=$(which google-chrome) npx eyes-storybook

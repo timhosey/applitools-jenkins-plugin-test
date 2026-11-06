@@ -1,0 +1,19 @@
+name: Applitools setup check
+on:
+  # workflow_dispatch in the README; it only fires from the default branch.
+  push:
+    branches: [github-action-gate]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  doctor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: applitools/eyes-github-action@0bed1bea82f506783cd5dbfaeaff2b4db082d285
+        with:
+          mode: doctor
+          apiKey: ${{ secrets.APPLITOOLS_API_KEY }}
+          readApiKey: ${{ secrets.APPLITOOLS_READ_KEY }}
+          mergeApiKey: ${{ secrets.APPLITOOLS_MERGE_KEY }}
