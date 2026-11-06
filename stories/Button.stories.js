@@ -9,3 +9,4 @@ export const Secondary = () => button('secondary', 'View results');
 export const MergeTestWebhook = () => button('primary', 'Merge test: webhook');
 export const MergeTestJobDeleted = () => button('primary', 'Merge test: job deleted');
 export const MergeTestJobDeleted2 = () => button('primary', 'Merge test: job deleted 2');
+export const MergeTestJobDeleted3 = () => button('primary', 'Merge test: job deleted 3');
